@@ -1,0 +1,13 @@
+﻿<Window x:Class="ProjeHub.UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ProjeHub - Dashboard" 
+        Height="720" Width="1080"
+        WindowStartupLocation="CenterScreen"
+        Background="#0F0F0F"
+        Foreground="White">
+
+    <Grid>
+
+    </Grid>
+</Window>

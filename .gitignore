@@ -1,0 +1,15 @@
+# C# ve Visual Studio geçici dosyaları
+.vs/
+bin/
+obj/
+Frontend-CSharp/.vs/
+Frontend-CSharp/ProjeHub.UI/bin/
+Frontend-CSharp/ProjeHub.UI/obj/
+
+# Python sanal ortamı ve önbellekleri
+venv/
+__pycache__/
+*.pyc
+
+# Veritabanı dosyası 
+*.db
