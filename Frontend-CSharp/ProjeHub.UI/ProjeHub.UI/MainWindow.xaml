@@ -8,6 +8,25 @@
         Foreground="White">
 
     <Grid>
+        <Grid>
+            <!-- Ekranı iki sütuna bölüyoruz -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"/>
+                <!-- Sol taraftaki menü için 250 piksellik sabit alan -->
+                <ColumnDefinition Width="*"/>
+                <!-- Sağ taraftaki içerik için kalan tüm boşluk (*) -->
+            </Grid.ColumnDefinitions>
+
+            <!-- 1. Sütun: SOL MENÜ ALANI -->
+            <Border Grid.Column="0" Background="#0A0A0A" BorderBrush="#1C1C1C" BorderThickness="0,0,1,0">
+                <!-- Menü butonlarını daha sonra buraya ekleyeceğiz -->
+            </Border>
+
+            <!-- 2. Sütun: SAĞ İÇERİK ALANI -->
+            <Grid Grid.Column="1" Background="#0F0F0F">
+                <!-- Uygulamanın ana içerikleri daha sonra buraya gelecek -->
+            </Grid>
+        </Grid>
 
     </Grid>
 </Window>
