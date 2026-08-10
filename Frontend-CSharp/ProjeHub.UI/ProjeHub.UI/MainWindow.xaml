@@ -17,14 +17,114 @@
                 <!-- Sağ taraftaki içerik için kalan tüm boşluk (*) -->
             </Grid.ColumnDefinitions>
 
+         
             <!-- 1. Sütun: SOL MENÜ ALANI -->
-            <Border Grid.Column="0" Background="#0A0A0A" BorderBrush="#1C1C1C" BorderThickness="0,0,1,0">
-                <!-- Menü butonlarını daha sonra buraya ekleyeceğiz -->
-            </Border>
+                <Border Grid.Column="0" Background="#0A0A0A" BorderBrush="#1C1C1C" BorderThickness="0,0,1,0">
+                    <StackPanel Margin="10,20,10,0">
 
+                        <!-- Uygulama Logosu / Başlığı -->
+                        <TextBlock Text="🚀 ProjeHub" 
+                           Foreground="White" 
+                           FontSize="24" 
+                           FontWeight="Bold" 
+                           HorizontalAlignment="Center" 
+                           Margin="0,0,0,40"/>
+
+                        <!-- Menü Butonları -->
+                        <Button Content="🏠  Ana Sayfa" 
+                        Height="45" 
+                        Background="Transparent" 
+                        Foreground="#E0E0E0" 
+                        BorderThickness="0" 
+                        HorizontalContentAlignment="Left" 
+                        Padding="15,0,0,0" 
+                        Margin="0,0,0,10" 
+                        FontSize="15" 
+                        Cursor="Hand"/>
+
+                        <Button Content="📌  Projelerim" 
+                        Height="45" 
+                        Background="Transparent" 
+                        Foreground="#A0A0A0" 
+                        BorderThickness="0" 
+                        HorizontalContentAlignment="Left" 
+                        Padding="15,0,0,0" 
+                        Margin="0,0,0,10" 
+                        FontSize="15" 
+                        Cursor="Hand"/>
+
+                        <Button Content="🔗  Kaydedilen Linkler" 
+                        Height="45" 
+                        Background="Transparent" 
+                        Foreground="#A0A0A0" 
+                        BorderThickness="0" 
+                        HorizontalContentAlignment="Left" 
+                        Padding="15,0,0,0" 
+                        Margin="0,0,0,10" 
+                        FontSize="15" 
+                        Cursor="Hand"/>
+
+                        <Button Content="⚙️  Ayarlar" 
+                        Height="45" 
+                        Background="Transparent" 
+                        Foreground="#A0A0A0" 
+                        BorderThickness="0" 
+                        HorizontalContentAlignment="Left" 
+                        Padding="15,0,0,0" 
+                        Margin="0,0,0,10" 
+                        FontSize="15" 
+                        Cursor="Hand"/>
+
+                    </StackPanel>
+                </Border>
+            
+
+          
             <!-- 2. Sütun: SAĞ İÇERİK ALANI -->
             <Grid Grid.Column="1" Background="#0F0F0F">
-                <!-- Uygulamanın ana içerikleri daha sonra buraya gelecek -->
+                <!-- Ekranı yukarıdan aşağıya (Satır olarak) ikiye bölüyoruz -->
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="80"/>
+                    <!-- Üst Bar (Header) için 80 piksel -->
+                    <RowDefinition Height="*"/>
+                    <!-- Geri kalan tüm alan içerik için -->
+                </Grid.RowDefinitions>
+
+                <!-- 1. Satır: ÜST BAR (HEADER) -->
+                <Border Grid.Row="0" BorderBrush="#1C1C1C" BorderThickness="0,0,0,1">
+                    <Grid>
+                        <!-- Sayfa Başlığı -->
+                        <TextBlock Text="Ana Sayfa" 
+                               Foreground="White" 
+                               FontSize="24" 
+                               FontWeight="SemiBold" 
+                               VerticalAlignment="Center" 
+                               Margin="30,0,0,0"/>
+
+                        <!-- Yeni Kayıt Ekleme Butonu (Mavi Vurgulu) -->
+                        <Button Content="➕ Yeni Ekle" 
+                            HorizontalAlignment="Right" 
+                            VerticalAlignment="Center" 
+                            Margin="0,0,30,0" 
+                            Width="120" 
+                            Height="38"
+                            Background="#007ACC" 
+                            Foreground="White" 
+                            BorderThickness="0"
+                            Cursor="Hand"
+                            FontWeight="Bold"
+                            FontSize="14"/>
+                    </Grid>
+                </Border>
+
+                <!-- 2. Satır: ANA İÇERİK ALANI (Gelecekte kartları buraya ekleyeceğiz) -->
+                <Grid Grid.Row="1" Margin="30">
+                    <TextBlock Text="Buraya veritabanından çektiğimiz linkler ve projeler gelecek..." 
+                           Foreground="#555555" 
+                           FontSize="16" 
+                           HorizontalAlignment="Center" 
+                           VerticalAlignment="Center"/>
+                </Grid>
             </Grid>
         </Grid>
 
