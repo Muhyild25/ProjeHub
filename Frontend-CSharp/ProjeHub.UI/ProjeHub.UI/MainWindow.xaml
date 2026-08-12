@@ -103,6 +103,7 @@
 
                         <!-- Yeni Kayıt Ekleme Butonu (Mavi Vurgulu) -->
                         <Button Content="➕ Yeni Ekle" 
+                            Click="BtnYeniEkle_Click"
                             HorizontalAlignment="Right" 
                             VerticalAlignment="Center" 
                             Margin="0,0,30,0" 
@@ -117,13 +118,66 @@
                     </Grid>
                 </Border>
 
-                <!-- 2. Satır: ANA İÇERİK ALANI (Gelecekte kartları buraya ekleyeceğiz) -->
-                <Grid Grid.Row="1" Margin="30">
-                    <TextBlock Text="Buraya veritabanından çektiğimiz linkler ve projeler gelecek..." 
-                           Foreground="#555555" 
-                           FontSize="16" 
-                           HorizontalAlignment="Center" 
-                           VerticalAlignment="Center"/>
+                <!-- 2. Satır: ANA İÇERİK ALANI -->
+                <Grid Grid.Row="1" Margin="30,20,30,30">
+                    <!-- İçerik çok olursa aşağı kaydırabilmek için ScrollViewer ekliyoruz -->
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" BorderThickness="0">
+
+                        <!-- Kartların yan yana dizilmesi ve ekrana sığmayınca alt satıra geçmesi için WrapPanel kullanıyoruz -->
+                        <WrapPanel>
+
+                            <!-- 1. ÖRNEK PROJE KARTI -->
+                            <Border Width="300" Height="140" Background="#1A1A1A" CornerRadius="8" Margin="0,0,20,20" BorderBrush="#2D2D2D" BorderThickness="1">
+                                <StackPanel Margin="15">
+                                    <!-- Kart Başlığı -->
+                                    <TextBlock Text="Github - Python Scraper Altyapısı" 
+                                           Foreground="White" 
+                                           FontSize="16" 
+                                           FontWeight="SemiBold" 
+                                           Margin="0,0,0,8"
+                                           TextTrimming="CharacterEllipsis"/>
+
+                                    <!-- Link -->
+                                    <TextBlock Text="https://github.com/Muhyild25/ProjeHub" 
+                                           Foreground="#007ACC" 
+                                           FontSize="13" 
+                                           Margin="0,0,0,25"
+                                           TextTrimming="CharacterEllipsis"/>
+
+                                    <!-- Alt Bilgiler (Tarih ve Buton) -->
+                                    <Grid>
+                                        <!-- Tarih -->
+                                        <TextBlock Text="📅 12 Ağustos 2026" 
+                                               Foreground="#777777" 
+                                               FontSize="12" 
+                                               VerticalAlignment="Center"/>
+
+                                        <!-- Git Butonu -->
+                                        <Button Content="Ziyaret Et ➔" 
+                                            HorizontalAlignment="Right" 
+                                            Background="#2D2D2D" 
+                                            Foreground="White" 
+                                            BorderThickness="0" 
+                                            Padding="10,5" 
+                                            Cursor="Hand"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- 2. ÖRNEK PROJE KARTI (Tasarımı görmek için kopyası) -->
+                            <Border Width="300" Height="140" Background="#1A1A1A" CornerRadius="8" Margin="0,0,20,20" BorderBrush="#2D2D2D" BorderThickness="1">
+                                <StackPanel Margin="15">
+                                    <TextBlock Text="WPF C# Modern Arayüz Tasarımı" Foreground="White" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,8" TextTrimming="CharacterEllipsis"/>
+                                    <TextBlock Text="https://docs.microsoft.com/wpf" Foreground="#007ACC" FontSize="13" Margin="0,0,0,25" TextTrimming="CharacterEllipsis"/>
+                                    <Grid>
+                                        <TextBlock Text="📅 10 Ağustos 2026" Foreground="#777777" FontSize="12" VerticalAlignment="Center"/>
+                                        <Button Content="Ziyaret Et ➔" HorizontalAlignment="Right" Background="#2D2D2D" Foreground="White" BorderThickness="0" Padding="10,5" Cursor="Hand"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+
+                        </WrapPanel>
+                    </ScrollViewer>
                 </Grid>
             </Grid>
         </Grid>

@@ -20,5 +20,20 @@ namespace ProjeHub.UI
         {
             InitializeComponent();
         }
+
+
+        private void BtnYeniEkle_Click(object sender, RoutedEventArgs e)
+        {
+            // Tasarladığımız pencereden yeni bir nesne (örnek) oluşturuyoruz
+            AddWindow eklemePenceresi = new AddWindow();
+
+            // ShowDialog() kullanarak pencereyi açıyoruz. 
+            // ShowDialog'un farkı: Bu küçük pencere kapanmadan arkadaki ana ekrana tıklanmasına izin vermez.
+            eklemePenceresi.ShowDialog();
+        }
+
+
+
+
     }
 }
