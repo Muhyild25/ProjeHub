@@ -43,6 +43,7 @@
 
                 <!-- İptal Butonu -->
                 <Button Content="İptal" 
+                        Click="BtnIptal_Click"
                         Grid.Column="0" 
                         Margin="0,0,10,0" 
                         Height="35" 
@@ -53,6 +54,7 @@
 
                 <!-- Kaydet Butonu -->
                 <Button Content="Kaydet" 
+                        Click="BtnKaydet_Click"
                         Grid.Column="1" 
                         Margin="10,0,0,0" 
                         Height="35" 
