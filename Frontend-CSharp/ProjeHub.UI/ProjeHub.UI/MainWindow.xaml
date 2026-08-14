@@ -123,60 +123,49 @@
                     <!-- İçerik çok olursa aşağı kaydırabilmek için ScrollViewer ekliyoruz -->
                     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" BorderThickness="0">
 
-                        <!-- Kartların yan yana dizilmesi ve ekrana sığmayınca alt satıra geçmesi için WrapPanel kullanıyoruz -->
-                        <WrapPanel>
+                        <!-- DİNAMİK KART LİSTESİ -->
+                        <ItemsControl Name="ProjeListesi" Margin="0,20,0,0">
 
-                            <!-- 1. ÖRNEK PROJE KARTI -->
-                            <Border Width="300" Height="140" Background="#1A1A1A" CornerRadius="8" Margin="0,0,20,20" BorderBrush="#2D2D2D" BorderThickness="1">
-                                <StackPanel Margin="15">
-                                    <!-- Kart Başlığı -->
-                                    <TextBlock Text="Github - Python Scraper Altyapısı" 
-                                           Foreground="White" 
-                                           FontSize="16" 
-                                           FontWeight="SemiBold" 
-                                           Margin="0,0,0,8"
-                                           TextTrimming="CharacterEllipsis"/>
+                            <!-- Kartların yan yana dizilmesi için WrapPanel kullanıyoruz -->
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
 
-                                    <!-- Link -->
-                                    <TextBlock Text="https://github.com/Muhyild25/ProjeHub" 
-                                           Foreground="#007ACC" 
-                                           FontSize="13" 
-                                           Margin="0,0,0,25"
-                                           TextTrimming="CharacterEllipsis"/>
+                            <!-- Her bir veri için üretilecek kartın ŞABLONU -->
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="#1E1E1E" CornerRadius="8" Padding="20" Margin="0,0,20,20" Width="300">
+                                        <StackPanel>
 
-                                    <!-- Alt Bilgiler (Tarih ve Buton) -->
-                                    <Grid>
-                                        <!-- Tarih -->
-                                        <TextBlock Text="📅 12 Ağustos 2026" 
-                                               Foreground="#777777" 
-                                               FontSize="12" 
-                                               VerticalAlignment="Center"/>
+                                            <!-- Başlık (Dinamik: Python'dan gelen 'title' buraya yazılacak) -->
+                                            <TextBlock Text="{Binding title}" Foreground="White" FontSize="16" FontWeight="SemiBold" TextWrapping="Wrap" Margin="0,0,0,10"/>
 
-                                        <!-- Git Butonu -->
-                                        <Button Content="Ziyaret Et ➔" 
-                                            HorizontalAlignment="Right" 
-                                            Background="#2D2D2D" 
-                                            Foreground="White" 
-                                            BorderThickness="0" 
-                                            Padding="10,5" 
-                                            Cursor="Hand"/>
-                                    </Grid>
-                                </StackPanel>
-                            </Border>
+                                            <!-- URL (Dinamik: Python'dan gelen 'url' buraya yazılacak) -->
+                                            <TextBlock Text="{Binding url}" Foreground="#4DA6FF" FontSize="12" TextWrapping="Wrap" Margin="0,0,0,20"/>
 
-                            <!-- 2. ÖRNEK PROJE KARTI (Tasarımı görmek için kopyası) -->
-                            <Border Width="300" Height="140" Background="#1A1A1A" CornerRadius="8" Margin="0,0,20,20" BorderBrush="#2D2D2D" BorderThickness="1">
-                                <StackPanel Margin="15">
-                                    <TextBlock Text="WPF C# Modern Arayüz Tasarımı" Foreground="White" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,8" TextTrimming="CharacterEllipsis"/>
-                                    <TextBlock Text="https://docs.microsoft.com/wpf" Foreground="#007ACC" FontSize="13" Margin="0,0,0,25" TextTrimming="CharacterEllipsis"/>
-                                    <Grid>
-                                        <TextBlock Text="📅 10 Ağustos 2026" Foreground="#777777" FontSize="12" VerticalAlignment="Center"/>
-                                        <Button Content="Ziyaret Et ➔" HorizontalAlignment="Right" Background="#2D2D2D" Foreground="White" BorderThickness="0" Padding="10,5" Cursor="Hand"/>
-                                    </Grid>
-                                </StackPanel>
-                            </Border>
+                                            <!-- Alt Kısım -->
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
 
-                        </WrapPanel>
+                                                <!-- Durum/Kategori (Dinamik) -->
+                                                <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center">
+                                                    <TextBlock Text="📌" Foreground="#888888" Margin="0,0,5,0"/>
+                                                    <TextBlock Text="{Binding category}" Foreground="#888888" FontSize="12"/>
+                                                </StackPanel>
+
+                                                <Button Content="Ziyaret Et ➔" Grid.Column="1" Background="#333333" Foreground="White" BorderThickness="0" Padding="10,5" Cursor="Hand"/>
+                                            </Grid>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+
+                        </ItemsControl>
                     </ScrollViewer>
                 </Grid>
             </Grid>
