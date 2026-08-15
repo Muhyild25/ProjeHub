@@ -13,6 +13,8 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 
+using System.Linq;
+
 namespace ProjeHub.UI
 {
     /// <summary>
@@ -140,6 +142,48 @@ namespace ProjeHub.UI
                     {
                         MessageBox.Show($"Sunucuya bağlanılamadı:\n{ex.Message}", "Bağlantı Hatası", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
+                }
+            }
+        }
+
+
+        // SOL MENÜ FİLTRELEME İŞLEMİ
+        private async void BtnFiltre_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+
+            if (btn != null && btn.Tag != null)
+            {
+                string secilenKategori = btn.Tag.ToString(); // "Hepsi", "Proje" veya "Link" gelecek
+
+                try
+                {
+                    // Önce veritabanındaki en güncel listeyi çekiyoruz
+                    HttpResponseMessage cevap = await client.GetAsync("http://127.0.0.1:8000/items/");
+
+                    if (cevap.IsSuccessStatusCode)
+                    {
+                        string jsonVeri = await cevap.Content.ReadAsStringAsync();
+                        List<HubItem> tumKayitlar = JsonSerializer.Deserialize<List<HubItem>>(jsonVeri);
+
+                        // Eğer "Ana Sayfa" butonuna (Tag="Hepsi") basıldıysa tüm listeyi ver
+                        if (secilenKategori == "Hepsi")
+                        {
+                            ProjeListesi.ItemsSource = tumKayitlar;
+                        }
+                        else
+                        {
+                            // "Projelerim" veya "Linkler" butonuna basıldıysa listeyi o kelimeye göre filtrele!
+                            // LINQ'in Where metodu ile saniyeler içinde ayıklıyoruz
+                            var filtrelenmisListe = tumKayitlar.Where(x => x.category != null && x.category.Contains(secilenKategori)).ToList();
+
+                            ProjeListesi.ItemsSource = filtrelenmisListe;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Filtreleme sırasında hata oluştu: {ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }

@@ -77,12 +77,15 @@ namespace ProjeHub.UI
                         }
                     }
 
+
+                    string secilenKategori = ((ComboBoxItem)CmbKategori.SelectedItem).Content.ToString();
+
                     // --- 2. AŞAMA: KAZINAN VERİYİ VERİTABANINA KAYDEDİYORUZ ---
                     var kayitVerisi = new
                     {
                         title = baslik,
                         url = url,
-                        category = "Genel",
+                        category = secilenKategori, // ARTIK DİNAMİK OLDU!
                         priority = "Orta",
                         status = "Yapılacak",
                         notes = ""
