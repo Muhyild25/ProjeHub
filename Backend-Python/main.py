@@ -4,9 +4,13 @@ from sqlalchemy.orm import Session
 from typing import Optional
 import datetime
 
+
+
 # Veritabanı ve YENİ scraper dosyamızı içeri aktarıyoruz
 from database import SessionLocal, HubItem
 from scraper import fetch_link_metadata
+
+from fastapi import HTTPException
 
 app = FastAPI(title="ProjeHub API")
 
@@ -59,3 +63,20 @@ def create_item(item: ItemCreate, db: Session = Depends(get_db)):
 def read_items(db: Session = Depends(get_db)):
     items = db.query(HubItem).all()
     return items
+
+
+
+
+@app.delete("/items/{item_id}")
+def delete_item(item_id: int, db: Session = Depends(get_db)):
+    # Önce veritabanında bu ID'ye sahip kaydı bul
+    item = db.query(HubItem).filter(HubItem.id == item_id).first()
+    
+    # Eğer bulamazsa 404 (Bulunamadı) hatası döndür
+    if not item:
+        raise HTTPException(status_code=404, detail="Kayıt bulunamadı")
+    
+    # Bulursa veritabanından sil ve onayla
+    db.delete(item)
+    db.commit()
+    return {"message": "Kayıt başarıyla silindi"}

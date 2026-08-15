@@ -17,21 +17,21 @@
                 <!-- Sağ taraftaki içerik için kalan tüm boşluk (*) -->
             </Grid.ColumnDefinitions>
 
-         
-            <!-- 1. Sütun: SOL MENÜ ALANI -->
-                <Border Grid.Column="0" Background="#0A0A0A" BorderBrush="#1C1C1C" BorderThickness="0,0,1,0">
-                    <StackPanel Margin="10,20,10,0">
 
-                        <!-- Uygulama Logosu / Başlığı -->
-                        <TextBlock Text="🚀 ProjeHub" 
+            <!-- 1. Sütun: SOL MENÜ ALANI -->
+            <Border Grid.Column="0" Background="#0A0A0A" BorderBrush="#1C1C1C" BorderThickness="0,0,1,0">
+                <StackPanel Margin="10,20,10,0">
+
+                    <!-- Uygulama Logosu / Başlığı -->
+                    <TextBlock Text="🚀 ProjeHub" 
                            Foreground="White" 
                            FontSize="24" 
                            FontWeight="Bold" 
                            HorizontalAlignment="Center" 
                            Margin="0,0,0,40"/>
 
-                        <!-- Menü Butonları -->
-                        <Button Content="🏠  Ana Sayfa" 
+                    <!-- Menü Butonları -->
+                    <Button Content="🏠  Ana Sayfa" 
                         Height="45" 
                         Background="Transparent" 
                         Foreground="#E0E0E0" 
@@ -42,7 +42,7 @@
                         FontSize="15" 
                         Cursor="Hand"/>
 
-                        <Button Content="📌  Projelerim" 
+                    <Button Content="📌  Projelerim" 
                         Height="45" 
                         Background="Transparent" 
                         Foreground="#A0A0A0" 
@@ -53,7 +53,7 @@
                         FontSize="15" 
                         Cursor="Hand"/>
 
-                        <Button Content="🔗  Kaydedilen Linkler" 
+                    <Button Content="🔗  Kaydedilen Linkler" 
                         Height="45" 
                         Background="Transparent" 
                         Foreground="#A0A0A0" 
@@ -64,7 +64,7 @@
                         FontSize="15" 
                         Cursor="Hand"/>
 
-                        <Button Content="⚙️  Ayarlar" 
+                    <Button Content="⚙️  Ayarlar" 
                         Height="45" 
                         Background="Transparent" 
                         Foreground="#A0A0A0" 
@@ -75,11 +75,11 @@
                         FontSize="15" 
                         Cursor="Hand"/>
 
-                    </StackPanel>
-                </Border>
-            
+                </StackPanel>
+            </Border>
 
-          
+
+
             <!-- 2. Sütun: SAĞ İÇERİK ALANI -->
             <Grid Grid.Column="1" Background="#0F0F0F">
                 <!-- Ekranı yukarıdan aşağıya (Satır olarak) ikiye bölüyoruz -->
@@ -158,7 +158,29 @@
                                                     <TextBlock Text="{Binding category}" Foreground="#888888" FontSize="12"/>
                                                 </StackPanel>
 
-                                                <Button Content="Ziyaret Et ➔" Grid.Column="1" Background="#333333" Foreground="White" BorderThickness="0" Padding="10,5" Cursor="Hand"/>
+                                                <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
+                                                    <!-- SİL BUTONU: Cebine (Tag) kaydın ID'sini koyuyoruz -->
+                                                    <Button Content="🗑️" 
+                                                          Background="Transparent" 
+                                                          Foreground="#FF4D4D" 
+                                                          BorderThickness="0" 
+                                                          Margin="0,0,10,0" 
+                                                          FontSize="16"
+                                                          Cursor="Hand" 
+                                                          ToolTip="Projeyi Sil"
+                                                          Tag="{Binding id}" 
+                                                          Click="BtnSil_Click"/>
+
+                                                    <!-- ZİYARET ET BUTONU (Mevcut butonumuz) -->
+                                                    <Button Content="Ziyaret Et ➔" 
+                                                          Background="#333333" 
+                                                          Foreground="White" 
+                                                          BorderThickness="0" 
+                                                          Padding="10,5" 
+                                                          Cursor="Hand" 
+                                                          Tag="{Binding url}" 
+                                                          Click="BtnZiyaretEt_Click"/>
+                                                </StackPanel>
                                             </Grid>
                                         </StackPanel>
                                     </Border>

@@ -82,6 +82,70 @@ namespace ProjeHub.UI
 
 
 
+        // ZİYARET ET BUTONU TIKLANINCA ÇALIŞACAK KOD
+        private void BtnZiyaretEt_Click(object sender, RoutedEventArgs e)
+        {
+            // Hangi butona tıklandığını bul
+            Button btn = sender as Button;
+
+            // Eğer butonun cebinde (Tag) bir link varsa...
+            if (btn != null && btn.Tag != null)
+            {
+                string url = btn.Tag.ToString();
+
+                try
+                {
+                    // Modern .NET uygulamalarında varsayılan tarayıcıyı açma kodu
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = url,
+                        UseShellExecute = true
+                    });
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Link açılamadı: {ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+
+        // SİL BUTONU TIKLANINCA ÇALIŞACAK KOD
+        private async void BtnSil_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+
+            if (btn != null && btn.Tag != null)
+            {
+                string id = btn.Tag.ToString();
+
+                MessageBoxResult sonuc = MessageBox.Show("Bu projeyi silmek istediğinize emin misiniz?", "Silme Onayı", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+                if (sonuc == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        HttpResponseMessage cevap = await client.DeleteAsync($"http://127.0.0.1:8000/items/{id}");
+
+                        if (cevap.IsSuccessStatusCode)
+                        {
+                            VerileriGetir(); // Listeyi yenile
+                        }
+                        else
+                        {
+                            MessageBox.Show($"Silme başarısız oldu: {cevap.StatusCode}", "Hata", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Sunucuya bağlanılamadı:\n{ex.Message}", "Bağlantı Hatası", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+        }
+
+
+
 
     }
 }
