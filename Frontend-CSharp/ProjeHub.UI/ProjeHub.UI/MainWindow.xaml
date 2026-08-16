@@ -17,187 +17,113 @@
                 <!-- Sağ taraftaki içerik için kalan tüm boşluk (*) -->
             </Grid.ColumnDefinitions>
 
-
             <!-- 1. Sütun: SOL MENÜ ALANI -->
             <Border Grid.Column="0" Background="#0A0A0A" BorderBrush="#1C1C1C" BorderThickness="0,0,1,0">
                 <StackPanel Margin="10,20,10,0">
 
                     <!-- Uygulama Logosu / Başlığı -->
                     <TextBlock Text="🚀 ProjeHub" 
-                           Foreground="White" 
-                           FontSize="24" 
-                           FontWeight="Bold" 
-                           HorizontalAlignment="Center" 
-                           Margin="0,0,0,40"/>
+                               Foreground="White" 
+                               FontSize="24" 
+                               FontWeight="Bold" 
+                               HorizontalAlignment="Center" 
+                               Margin="0,0,0,40"/>
 
                     <!-- Menü Butonları -->
-                    <Button Content="🏠  Ana Sayfa"
-                        Height="45"
-                        Background="Transparent"
-                        Foreground="#E0E0E0"
-                        BorderThickness="0"
-                        HorizontalContentAlignment="Left"
-                        Padding="15,0,0,0"
-                        Margin="0,0,0,10"
-                        FontSize="15"
-                        Cursor="Hand"
-                        Click="BtnFiltre_Click"
-                        Tag="Hepsi"/>
+                    <Button Content="🏠  Ana Sayfa" Height="45" Background="Transparent" Foreground="#E0E0E0" BorderThickness="0" HorizontalContentAlignment="Left" Padding="15,0,0,0" Margin="0,0,0,10" FontSize="15" Cursor="Hand" Click="BtnFiltre_Click" Tag="Hepsi"/>
+                    <Button Content="📌  Projelerim" Height="45" Background="Transparent" Foreground="#A0A0A0" BorderThickness="0" HorizontalContentAlignment="Left" Padding="15,0,0,0" Margin="0,0,0,10" FontSize="15" Cursor="Hand" Click="BtnFiltre_Click" Tag="Proje"/>
+                    <Button Content="🔗  Kaydedilen Linkler" Height="45" Background="Transparent" Foreground="#A0A0A0" BorderThickness="0" HorizontalContentAlignment="Left" Padding="15,0,0,0" Margin="0,0,0,10" FontSize="15" Cursor="Hand" Click="BtnFiltre_Click" Tag="Link"/>
 
-                    <Button Content="📌  Projelerim"
-                        Height="45"
-                        Background="Transparent"
-                        Foreground="#A0A0A0"
-                        BorderThickness="0"
-                        HorizontalContentAlignment="Left"
-                        Padding="15,0,0,0"
-                        Margin="0,0,0,10"
-                        FontSize="15"
-                        Cursor="Hand"
-                        Click="BtnFiltre_Click"
-                        Tag="Proje"/>
-
-                    <Button Content="🔗  Kaydedilen Linkler"
-                        Height="45"
-                        Background="Transparent"
-                        Foreground="#A0A0A0"
-                        BorderThickness="0"
-                        HorizontalContentAlignment="Left"
-                        Padding="15,0,0,0"
-                        Margin="0,0,0,10"
-                        FontSize="15"
-                        Cursor="Hand"
-                        Click="BtnFiltre_Click"
-                        Tag="Link"/>
-
-                    <Button Content="⚙️  Ayarlar" 
-                        Height="45" 
-                        Background="Transparent" 
-                        Foreground="#A0A0A0" 
-                        BorderThickness="0" 
-                        HorizontalContentAlignment="Left" 
-                        Padding="15,0,0,0" 
-                        Margin="0,0,0,10" 
-                        FontSize="15" 
-                        Cursor="Hand"/>
-
+                    <!-- AYARLAR BUTONU GÜNCELLENDİ -->
+                    <Button Content="⚙️  Ayarlar" Height="45" Background="Transparent" Foreground="#A0A0A0" BorderThickness="0" HorizontalContentAlignment="Left" Padding="15,0,0,0" Margin="0,0,0,10" FontSize="15" Cursor="Hand" Click="BtnAyarlar_Click"/>
                 </StackPanel>
             </Border>
 
-
-
             <!-- 2. Sütun: SAĞ İÇERİK ALANI -->
             <Grid Grid.Column="1" Background="#0F0F0F">
-                <!-- Ekranı yukarıdan aşağıya (Satır olarak) ikiye bölüyoruz -->
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="80"/>
-                    <!-- Üst Bar (Header) için 80 piksel -->
-                    <RowDefinition Height="*"/>
-                    <!-- Geri kalan tüm alan içerik için -->
-                </Grid.RowDefinitions>
 
-                <!-- 1. Satır: ÜST BAR (HEADER) -->
-                <Border Grid.Row="0" BorderBrush="#1C1C1C" BorderThickness="0,0,0,1">
-                    <Grid>
-                        <!-- Sayfa Başlığı -->
-                        <TextBlock Text="Ana Sayfa" 
-                               Foreground="White" 
-                               FontSize="24" 
-                               FontWeight="SemiBold" 
-                               VerticalAlignment="Center" 
-                               Margin="30,0,0,0"/>
+                <!-- KATMAN 1: ANA EKRAN (Listelerin ve Üst Barın olduğu kısım) -->
+                <Grid x:Name="AnaEkranPaneli" Visibility="Visible">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="80"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-                        <!-- Yeni Kayıt Ekleme Butonu (Mavi Vurgulu) -->
-                        <Button Content="➕ Yeni Ekle" 
-                            Click="BtnYeniEkle_Click"
-                            HorizontalAlignment="Right" 
-                            VerticalAlignment="Center" 
-                            Margin="0,0,30,0" 
-                            Width="120" 
-                            Height="38"
-                            Background="#007ACC" 
-                            Foreground="White" 
-                            BorderThickness="0"
-                            Cursor="Hand"
-                            FontWeight="Bold"
-                            FontSize="14"/>
+                    <!-- ÜST BAR (HEADER) -->
+                    <Border Grid.Row="0" BorderBrush="#1C1C1C" BorderThickness="0,0,0,1">
+                        <Grid>
+                            <TextBlock x:Name="TxtSayfaBasligi" Text="Ana Sayfa" Foreground="White" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center" Margin="30,0,0,0"/>
+                            <Button x:Name="BtnYeniEkle" Content="➕ Yeni Ekle" Click="BtnYeniEkle_Click" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,30,0" Width="120" Height="38" Background="#007ACC" Foreground="White" BorderThickness="0" Cursor="Hand" FontWeight="Bold" FontSize="14"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- ANA İÇERİK ALANI (KARTLAR) -->
+                    <Grid Grid.Row="1" Margin="30,20,30,30">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" BorderThickness="0">
+                            <ItemsControl Name="ProjeListesi" Margin="0,20,0,0">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Background="#1E1E1E" CornerRadius="8" Padding="20" Margin="0,0,20,20" Width="300">
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding title}" Foreground="White" FontSize="16" FontWeight="SemiBold" TextWrapping="Wrap" Margin="0,0,0,10"/>
+                                                <TextBlock Text="{Binding url}" Foreground="#4DA6FF" FontSize="12" TextWrapping="Wrap" Margin="0,0,0,20"/>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center">
+                                                        <TextBlock Text="📌" Foreground="#888888" Margin="0,0,5,0"/>
+                                                        <TextBlock Text="{Binding category}" Foreground="#888888" FontSize="12"/>
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
+                                                        <!-- DÜZENLE BUTONU (YENİ) -->
+                                                        <Button Content="✏️" Background="Transparent" Foreground="#FFD700" BorderThickness="0" Margin="0,0,10,0" FontSize="16" Cursor="Hand" ToolTip="Projeyi Düzenle" Tag="{Binding id}" Click="BtnDuzenle_Click"/>
+
+                                                        <!-- SİL BUTONU -->
+                                                        <Button Content="🗑️" Background="Transparent" Foreground="#FF4D4D" BorderThickness="0" Margin="0,0,10,0" FontSize="16" Cursor="Hand" ToolTip="Projeyi Sil" Tag="{Binding id}" Click="BtnSil_Click"/>
+
+                                                        <!-- ZİYARET ET BUTONU -->
+                                                        <Button Content="Ziyaret Et ➔" Background="#333333" Foreground="White" BorderThickness="0" Padding="10,5" Cursor="Hand" Tag="{Binding url}" Click="BtnZiyaretEt_Click"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
                     </Grid>
-                </Border>
-
-                <!-- 2. Satır: ANA İÇERİK ALANI -->
-                <Grid Grid.Row="1" Margin="30,20,30,30">
-                    <!-- İçerik çok olursa aşağı kaydırabilmek için ScrollViewer ekliyoruz -->
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" BorderThickness="0">
-
-                        <!-- DİNAMİK KART LİSTESİ -->
-                        <ItemsControl Name="ProjeListesi" Margin="0,20,0,0">
-
-                            <!-- Kartların yan yana dizilmesi için WrapPanel kullanıyoruz -->
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel Orientation="Horizontal" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-
-                            <!-- Her bir veri için üretilecek kartın ŞABLONU -->
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Background="#1E1E1E" CornerRadius="8" Padding="20" Margin="0,0,20,20" Width="300">
-                                        <StackPanel>
-
-                                            <!-- Başlık (Dinamik: Python'dan gelen 'title' buraya yazılacak) -->
-                                            <TextBlock Text="{Binding title}" Foreground="White" FontSize="16" FontWeight="SemiBold" TextWrapping="Wrap" Margin="0,0,0,10"/>
-
-                                            <!-- URL (Dinamik: Python'dan gelen 'url' buraya yazılacak) -->
-                                            <TextBlock Text="{Binding url}" Foreground="#4DA6FF" FontSize="12" TextWrapping="Wrap" Margin="0,0,0,20"/>
-
-                                            <!-- Alt Kısım -->
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                </Grid.ColumnDefinitions>
-
-                                                <!-- Durum/Kategori (Dinamik) -->
-                                                <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center">
-                                                    <TextBlock Text="📌" Foreground="#888888" Margin="0,0,5,0"/>
-                                                    <TextBlock Text="{Binding category}" Foreground="#888888" FontSize="12"/>
-                                                </StackPanel>
-
-                                                <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
-                                                    <!-- SİL BUTONU: Cebine (Tag) kaydın ID'sini koyuyoruz -->
-                                                    <Button Content="🗑️" 
-                                                          Background="Transparent" 
-                                                          Foreground="#FF4D4D" 
-                                                          BorderThickness="0" 
-                                                          Margin="0,0,10,0" 
-                                                          FontSize="16"
-                                                          Cursor="Hand" 
-                                                          ToolTip="Projeyi Sil"
-                                                          Tag="{Binding id}" 
-                                                          Click="BtnSil_Click"/>
-
-                                                    <!-- ZİYARET ET BUTONU (Mevcut butonumuz) -->
-                                                    <Button Content="Ziyaret Et ➔" 
-                                                          Background="#333333" 
-                                                          Foreground="White" 
-                                                          BorderThickness="0" 
-                                                          Padding="10,5" 
-                                                          Cursor="Hand" 
-                                                          Tag="{Binding url}" 
-                                                          Click="BtnZiyaretEt_Click"/>
-                                                </StackPanel>
-                                            </Grid>
-                                        </StackPanel>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-
-                        </ItemsControl>
-                    </ScrollViewer>
                 </Grid>
+
+                <!-- KATMAN 2: AYARLAR EKRANI (Varsayılan Olarak Gizli) -->
+                <Grid x:Name="AyarlarPaneli" Visibility="Collapsed" Margin="30">
+                    <StackPanel>
+                        <TextBlock Text="⚙️ Ayarlar" Foreground="White" FontSize="28" FontWeight="Bold" Margin="0,0,0,30"/>
+
+                        <!-- Tema Seçici -->
+                        <Border Background="#1E1E1E" CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                            <StackPanel>
+                                <TextBlock Text="Uygulama Teması" Foreground="White" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                                <TextBlock Text="ProjeHub'ın vurgu rengini (butonlar vb.) değiştirin." Foreground="#A0A0A0" FontSize="12" Margin="0,0,0,20"/>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="Mavi" Background="#007ACC" Foreground="White" BorderThickness="0" Width="100" Height="40" Margin="0,0,10,0" Cursor="Hand" Click="BtnTema_Click" Tag="#007ACC"/>
+                                    <Button Content="Yeşil" Background="#2EA043" Foreground="White" BorderThickness="0" Width="100" Height="40" Margin="0,0,10,0" Cursor="Hand" Click="BtnTema_Click" Tag="#2EA043"/>
+                                    <Button Content="Mor" Background="#8A2BE2" Foreground="White" BorderThickness="0" Width="100" Height="40" Margin="0,0,10,0" Cursor="Hand" Click="BtnTema_Click" Tag="#8A2BE2"/>
+                                    <Button Content="Kırmızı" Background="#D0342C" Foreground="White" BorderThickness="0" Width="100" Height="40" Margin="0,0,10,0" Cursor="Hand" Click="BtnTema_Click" Tag="#D0342C"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+
             </Grid>
         </Grid>
-
     </Grid>
 </Window>

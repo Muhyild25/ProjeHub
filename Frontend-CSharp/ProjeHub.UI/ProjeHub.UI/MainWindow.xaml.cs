@@ -29,6 +29,18 @@ namespace ProjeHub.UI
         {
             InitializeComponent();
 
+            // UYGULAMA AÇILIRKEN KAYITLI TEMAYI YÜKLE
+            try
+            {
+                if (System.IO.File.Exists("tema.txt"))
+                {
+                    string kayitliRenk = System.IO.File.ReadAllText("tema.txt");
+                    var cevirici = new System.Windows.Media.BrushConverter();
+                    BtnYeniEkle.Background = (System.Windows.Media.Brush)cevirici.ConvertFromString(kayitliRenk);
+                }
+            }
+            catch { /* Dosya bozuksa veya hata varsa varsayılan Mavi renkte kalır, sorun yok */ }
+
             // 2. Pencere açılır açılmaz verileri çekme motorunu çalıştırıyoruz
             VerileriGetir();
 
@@ -146,10 +158,42 @@ namespace ProjeHub.UI
             }
         }
 
+        // DÜZENLE BUTONUNA TIKLANINCA ÇALIŞACAK KOD
+        private void BtnDuzenle_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+
+            if (btn != null && btn.DataContext != null)
+            {
+                // Tıklanan kartın içindeki veriyi (HubItem) komple alıyoruz! (WPF Büyüsü ✨)
+                HubItem secilenProje = btn.DataContext as HubItem;
+
+                if (secilenProje != null)
+                {
+                    // Düzenleme penceresini açarken mevcut bilgileri içine gönderiyoruz
+                    EditWindow duzenlePenceresi = new EditWindow(
+                        secilenProje.id.ToString(),
+                        secilenProje.title,
+                        secilenProje.category,
+                        secilenProje.url
+                    );
+
+                    duzenlePenceresi.ShowDialog();
+
+                    // Düzenleme penceresi kapanınca ana listeyi otomatik yenile
+                    VerileriGetir();
+                }
+            }
+        }
 
         // SOL MENÜ FİLTRELEME İŞLEMİ
         private async void BtnFiltre_Click(object sender, RoutedEventArgs e)
         {
+
+            AnaEkranPaneli.Visibility = Visibility.Visible;
+            AyarlarPaneli.Visibility = Visibility.Collapsed;
+
+
             Button btn = sender as Button;
 
             if (btn != null && btn.Tag != null)
@@ -188,6 +232,45 @@ namespace ProjeHub.UI
             }
         }
 
+
+        // AYARLAR BUTONUNA TIKLANINCA
+        private void BtnAyarlar_Click(object sender, RoutedEventArgs e)
+        {
+            // Ana ekranı gizle, ayarlar panelini göster
+            AnaEkranPaneli.Visibility = Visibility.Collapsed;
+            AyarlarPaneli.Visibility = Visibility.Visible;
+        }
+
+        // TEMA RENGİ DEĞİŞTİRME İŞLEMİ
+        private void BtnTema_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            if (btn != null && btn.Tag != null)
+            {
+                string secilenRenkHex = btn.Tag.ToString(); // Örneğin: "#2EA043"
+
+                try
+                {
+                    // Hex kodunu C#'ın anlayacağı fırçaya (Brush) çeviriyoruz
+                    var cevirici = new System.Windows.Media.BrushConverter();
+                    var firca = (System.Windows.Media.Brush)cevirici.ConvertFromString(secilenRenkHex);
+
+                    // Yeni Ekle butonunun rengini değiştiriyoruz
+                    BtnYeniEkle.Background = firca;
+
+                    System.IO.File.WriteAllText("tema.txt", secilenRenkHex);
+
+                    // İstersen burada uygulamanın genel arka planını veya menü yazılarını da değiştirebilirsin
+                    // Şimdilik sadece vurgu rengimiz olan Yeni Ekle butonunu değiştirdik.
+
+                    MessageBox.Show("Tema rengi başarıyla güncellendi!", "Tema Değişti", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Renk değiştirilirken hata oluştu: {ex.Message}");
+                }
+            }
+        }
 
 
 
