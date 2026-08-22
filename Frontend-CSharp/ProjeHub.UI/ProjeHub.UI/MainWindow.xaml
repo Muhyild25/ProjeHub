@@ -8,185 +8,187 @@
         Foreground="White">
 
     <Grid>
-        <Grid>
-            <!-- Ekranı iki sütuna bölüyoruz -->
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="250"/>
-                <!-- Sol taraftaki menü için 250 piksellik sabit alan -->
-                <ColumnDefinition Width="*"/>
-                <!-- Sağ taraftaki içerik için kalan tüm boşluk (*) -->
-            </Grid.ColumnDefinitions>
+        <!-- Ekranı iki sütuna bölüyoruz -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <!-- Sol taraftaki menü -->
+            <ColumnDefinition Width="*"/>
+            <!-- Sağ taraftaki içerik -->
+        </Grid.ColumnDefinitions>
 
-            <!-- 1. Sütun: SOL MENÜ ALANI -->
-            <Border Grid.Column="0" Background="#0A0A0A" BorderBrush="#1C1C1C" BorderThickness="0,0,1,0">
-                <StackPanel Margin="10,20,10,0">
+        <!-- 1. Sütun: SOL MENÜ ALANI -->
+        <Border Grid.Column="0" Background="#0A0A0A" BorderBrush="#1C1C1C" BorderThickness="0,0,1,0">
+            <StackPanel Margin="10,20,10,0">
+                <!-- Uygulama Logosu -->
+                <TextBlock Text="🚀 ProjeHub" Foreground="White" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,40"/>
 
-                    <!-- Uygulama Logosu / Başlığı -->
-                    <TextBlock Text="🚀 ProjeHub" 
-                               Foreground="White" 
-                               FontSize="24" 
-                               FontWeight="Bold" 
-                               HorizontalAlignment="Center" 
-                               Margin="0,0,0,40"/>
+                <!-- Menü Butonları -->
+                <Button Content="🏠  Ana Sayfa" Height="45" Background="Transparent" Foreground="#E0E0E0" BorderThickness="0" HorizontalContentAlignment="Left" Padding="15,0,0,0" Margin="0,0,0,10" FontSize="15" Cursor="Hand" Click="BtnFiltre_Click" Tag="Hepsi"/>
+                <Button Content="📌  Projelerim" Height="45" Background="Transparent" Foreground="#A0A0A0" BorderThickness="0" HorizontalContentAlignment="Left" Padding="15,0,0,0" Margin="0,0,0,10" FontSize="15" Cursor="Hand" Click="BtnFiltre_Click" Tag="Proje"/>
+                <Button Content="🔗  Kaydedilen Linkler" Height="45" Background="Transparent" Foreground="#A0A0A0" BorderThickness="0" HorizontalContentAlignment="Left" Padding="15,0,0,0" Margin="0,0,0,10" FontSize="15" Cursor="Hand" Click="BtnFiltre_Click" Tag="Link"/>
+                <Button Content="⚙️  Ayarlar" Height="45" Background="Transparent" Foreground="#A0A0A0" BorderThickness="0" HorizontalContentAlignment="Left" Padding="15,0,0,0" Margin="0,0,0,10" FontSize="15" Cursor="Hand" Click="BtnAyarlar_Click"/>
+            </StackPanel>
+        </Border>
 
-                    <!-- Menü Butonları -->
-                    <Button Content="🏠  Ana Sayfa" Height="45" Background="Transparent" Foreground="#E0E0E0" BorderThickness="0" HorizontalContentAlignment="Left" Padding="15,0,0,0" Margin="0,0,0,10" FontSize="15" Cursor="Hand" Click="BtnFiltre_Click" Tag="Hepsi"/>
-                    <Button Content="📌  Projelerim" Height="45" Background="Transparent" Foreground="#A0A0A0" BorderThickness="0" HorizontalContentAlignment="Left" Padding="15,0,0,0" Margin="0,0,0,10" FontSize="15" Cursor="Hand" Click="BtnFiltre_Click" Tag="Proje"/>
-                    <Button Content="🔗  Kaydedilen Linkler" Height="45" Background="Transparent" Foreground="#A0A0A0" BorderThickness="0" HorizontalContentAlignment="Left" Padding="15,0,0,0" Margin="0,0,0,10" FontSize="15" Cursor="Hand" Click="BtnFiltre_Click" Tag="Link"/>
+        <!-- 2. Sütun: SAĞ İÇERİK ALANI -->
+        <Grid Grid.Column="1" Background="#0F0F0F">
 
-                    <!-- AYARLAR BUTONU GÜNCELLENDİ -->
-                    <Button Content="⚙️  Ayarlar" Height="45" Background="Transparent" Foreground="#A0A0A0" BorderThickness="0" HorizontalContentAlignment="Left" Padding="15,0,0,0" Margin="0,0,0,10" FontSize="15" Cursor="Hand" Click="BtnAyarlar_Click"/>
-                </StackPanel>
-            </Border>
+            <!-- KATMAN 1: ANA EKRAN -->
+            <Grid x:Name="AnaEkranPaneli" Visibility="Visible">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="80"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-            <!-- 2. Sütun: SAĞ İÇERİK ALANI -->
-            <Grid Grid.Column="1" Background="#0F0F0F">
+                <!-- ÜST BAR (HEADER) VE ARAMA ÇUBUĞU -->
+                <Border Grid.Row="0" BorderBrush="#1C1C1C" BorderThickness="0,0,0,1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
 
-                <!-- KATMAN 1: ANA EKRAN (Listelerin ve Üst Barın olduğu kısım) -->
-                <Grid x:Name="AnaEkranPaneli" Visibility="Visible">
+                        <!-- Başlık -->
+                        <TextBlock Grid.Column="0" x:Name="TxtSayfaBasligi" Text="Ana Sayfa" Foreground="White" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center" Margin="30,0,0,0"/>
+
+                        <!-- 🔍 Arama Çubuğu -->
+                        <Border Grid.Column="1" Background="#1A1A1A" BorderBrush="#2D2D2D" BorderThickness="1" CornerRadius="6" Margin="30,0,30,0" MaxWidth="400" Height="36">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="🔍" Foreground="#888888" VerticalAlignment="Center" Margin="10,0,5,0"/>
+                                <TextBox x:Name="TxtArama" Grid.Column="1" Background="Transparent" Foreground="White" BorderThickness="0" VerticalContentAlignment="Center" FontSize="14" TextChanged="TxtArama_TextChanged"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- Yeni Ekle Butonu -->
+                        <Button Grid.Column="2" x:Name="BtnYeniEkle" Content="➕ Yeni Ekle" Click="BtnYeniEkle_Click" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,30,0" Width="120" Height="38" Background="#007ACC" Foreground="White" BorderThickness="0" Cursor="Hand" FontWeight="Bold" FontSize="14"/>
+                    </Grid>
+                </Border>
+
+                <!-- ANA İÇERİK (İSTATİSTİKLER VE KARTLAR) -->
+                <Grid Grid.Row="1" Margin="30,15,30,30">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="80"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <!-- ÜST BAR (HEADER) VE YENİ ARAMA ÇUBUĞU -->
-                    <Border Grid.Row="0" BorderBrush="#1C1C1C" BorderThickness="0,0,0,1">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <!-- Başlık -->
-                                <ColumnDefinition Width="*"/>
-                                <!-- Arama Çubuğu (Ortayı kaplar) -->
-                                <ColumnDefinition Width="Auto"/>
-                                <!-- Buton -->
-                            </Grid.ColumnDefinitions>
+                    <!-- 📊 İSTATİSTİK PANOSU -->
+                    <Border Grid.Row="0" Background="#141414" BorderBrush="#2D2D2D" BorderThickness="1" CornerRadius="8" Padding="15,10" Margin="0,0,0,20">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="📊 Özet:" Foreground="#A0A0A0" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,20,0"/>
 
-                            <!-- Başlık -->
-                            <TextBlock Grid.Column="0" x:Name="TxtSayfaBasligi" Text="Ana Sayfa" Foreground="White" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center" Margin="30,0,0,0"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,20,0">
+                                <TextBlock Text="Toplam Proje:" Foreground="#888888" FontSize="14" Margin="0,0,5,0"/>
+                                <TextBlock x:Name="TxtToplam" Text="0" Foreground="White" FontSize="14" FontWeight="Bold"/>
+                            </StackPanel>
 
-                            <!-- 🔍 YENİ EKLENEN: Arama Çubuğu -->
-                            <Border Grid.Column="1" Background="#1A1A1A" BorderBrush="#2D2D2D" BorderThickness="1" CornerRadius="6" Margin="30,0,30,0" MaxWidth="400" Height="36">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="🔍" Foreground="#888888" VerticalAlignment="Center" Margin="10,0,5,0"/>
-                                    <!-- TextChanged eventi ile arka plandaki arama metodunu tetikliyoruz -->
-                                    <TextBox x:Name="TxtArama" Grid.Column="1" Background="Transparent" Foreground="White" BorderThickness="0" VerticalContentAlignment="Center" FontSize="14" TextChanged="TxtArama_TextChanged"/>
-                                </Grid>
-                            </Border>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,20,0">
+                                <TextBlock Text="Biten:" Foreground="#888888" FontSize="14" Margin="0,0,5,0"/>
+                                <TextBlock x:Name="TxtBiten" Text="0" Foreground="#2EA043" FontSize="14" FontWeight="Bold"/>
+                            </StackPanel>
 
-                            <!-- Yeni Ekle Butonu -->
-                            <Button Grid.Column="2" x:Name="BtnYeniEkle" Content="➕ Yeni Ekle" Click="BtnYeniEkle_Click" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,30,0" Width="120" Height="38" Background="{Binding Background, RelativeSource={RelativeSource Self}}" Foreground="White" BorderThickness="0" Cursor="Hand" FontWeight="Bold" FontSize="14"/>
-                        </Grid>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Devam Eden:" Foreground="#888888" FontSize="14" Margin="0,0,5,0"/>
+                                <TextBlock x:Name="TxtDevam" Text="0" Foreground="#D29922" FontSize="14" FontWeight="Bold"/>
+                            </StackPanel>
+                        </StackPanel>
                     </Border>
 
-                    <!-- ANA İÇERİK ALANI (KARTLAR) -->
-                    <Grid Grid.Row="1" Margin="30,20,30,30">
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" BorderThickness="0">
-                            <ItemsControl Name="ProjeListesi" Margin="0,20,0,0">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel Orientation="Horizontal" />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <!-- Her bir veri için üretilecek kartın ŞABLONU -->
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Border Background="#1E1E1E" CornerRadius="8" Padding="20" Margin="0,0,20,20" Width="300">
-                                            <StackPanel>
+                    <!-- KART LİSTESİ -->
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" BorderThickness="0">
+                        <ItemsControl Name="ProjeListesi">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <!-- KART ŞABLONU -->
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="#1E1E1E" CornerRadius="8" Padding="20" Margin="0,0,20,20" Width="300">
+                                        <StackPanel>
 
-                                                <!-- ÜST KISIM: BAŞLIK VE YENİ DURUM ROZETİ -->
-                                                <Grid Margin="0,0,0,10">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                    </Grid.ColumnDefinitions>
+                                            <!-- BAŞLIK VE DURUM ROZETİ -->
+                                            <Grid Margin="0,0,0,10">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
 
-                                                    <!-- Başlık -->
-                                                    <TextBlock Grid.Column="0" Text="{Binding title}" Foreground="White" FontSize="16" FontWeight="SemiBold" TextWrapping="Wrap" Margin="0,0,10,0"/>
+                                                <TextBlock Grid.Column="0" Text="{Binding title}" Foreground="White" FontSize="16" FontWeight="SemiBold" TextWrapping="Wrap" Margin="0,0,10,0"/>
 
-                                                    <!-- 🚥 DURUM ROZETİ (YENİ) -->
-                                                    <Border Grid.Column="1" VerticalAlignment="Top" CornerRadius="4" Padding="6,2" Margin="5,0,0,0">
-                                                        <Border.Style>
-                                                            <Style TargetType="Border">
-                                                                <Setter Property="Background" Value="#007ACC"/>
-                                                                <!-- Varsayılan: Mavi (Yapılacak) -->
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding status}" Value="Bitti">
-                                                                        <Setter Property="Background" Value="#2EA043"/>
-                                                                        <!-- Yeşil -->
-                                                                    </DataTrigger>
-                                                                    <DataTrigger Binding="{Binding status}" Value="Devam Ediyor">
-                                                                        <Setter Property="Background" Value="#D29922"/>
-                                                                        <!-- Turuncu -->
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </Border.Style>
-                                                        <!-- Rozet içindeki yazı -->
-                                                        <TextBlock Text="{Binding status}" Foreground="White" FontSize="11" FontWeight="Bold"/>
-                                                    </Border>
-                                                </Grid>
+                                                <!-- ROZET -->
+                                                <Border Grid.Column="1" VerticalAlignment="Top" CornerRadius="4" Padding="6,2" Margin="5,0,0,0">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Background" Value="#007ACC"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding status}" Value="Bitti">
+                                                                    <Setter Property="Background" Value="#2EA043"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding status}" Value="Devam Ediyor">
+                                                                    <Setter Property="Background" Value="#D29922"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <TextBlock Text="{Binding status}" Foreground="White" FontSize="11" FontWeight="Bold"/>
+                                                </Border>
+                                            </Grid>
 
-                                                <!-- URL -->
-                                                <TextBlock Text="{Binding url}" Foreground="#4DA6FF" FontSize="12" TextWrapping="Wrap" Margin="0,0,0,10"/>
+                                            <TextBlock Text="{Binding url}" Foreground="#4DA6FF" FontSize="12" TextWrapping="Wrap" Margin="0,0,0,10"/>
+                                            <TextBlock Text="{Binding notes}" Foreground="#AAAAAA" FontSize="13" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" MaxHeight="36" Margin="0,0,0,20" ToolTip="{Binding notes}"/>
 
-                                                <!-- NOTLAR ÖNİZLEMESİ -->
-                                                <TextBlock Text="{Binding notes}" Foreground="#AAAAAA" FontSize="13" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" MaxHeight="36" Margin="0,0,0,20" ToolTip="{Binding notes}"/>
+                                            <!-- ALT KISIM BUTONLARI -->
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
 
-                                                <!-- Alt Kısım -->
-                                                <Grid>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                    </Grid.ColumnDefinitions>
+                                                <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center">
+                                                    <TextBlock Text="📌" Foreground="#888888" Margin="0,0,5,0"/>
+                                                    <TextBlock Text="{Binding category}" Foreground="#888888" FontSize="12"/>
+                                                </StackPanel>
 
-                                                    <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center">
-                                                        <TextBlock Text="📌" Foreground="#888888" Margin="0,0,5,0"/>
-                                                        <TextBlock Text="{Binding category}" Foreground="#888888" FontSize="12"/>
-                                                    </StackPanel>
-
-                                                    <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
-                                                        <Button Content="✏️" Background="Transparent" Foreground="#FFD700" BorderThickness="0" Margin="0,0,10,0" FontSize="16" Cursor="Hand" ToolTip="Projeyi Düzenle" Tag="{Binding id}" Click="BtnDuzenle_Click"/>
-                                                        <Button Content="🗑️" Background="Transparent" Foreground="#FF4D4D" BorderThickness="0" Margin="0,0,10,0" FontSize="16" Cursor="Hand" ToolTip="Projeyi Sil" Tag="{Binding id}" Click="BtnSil_Click"/>
-                                                        <Button Content="Ziyaret Et ➔" Background="#333333" Foreground="White" BorderThickness="0" Padding="10,5" Cursor="Hand" Tag="{Binding url}" Click="BtnZiyaretEt_Click"/>
-                                                    </StackPanel>
-                                                </Grid>
-
-                                            </StackPanel>
-                                        </Border>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </ScrollViewer>
-                    </Grid>
+                                                <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
+                                                    <Button Content="✏️" Background="Transparent" Foreground="#FFD700" BorderThickness="0" Margin="0,0,10,0" FontSize="16" Cursor="Hand" ToolTip="Projeyi Düzenle" Tag="{Binding id}" Click="BtnDuzenle_Click"/>
+                                                    <Button Content="🗑️" Background="Transparent" Foreground="#FF4D4D" BorderThickness="0" Margin="0,0,10,0" FontSize="16" Cursor="Hand" ToolTip="Projeyi Sil" Tag="{Binding id}" Click="BtnSil_Click"/>
+                                                    <Button Content="Ziyaret Et ➔" Background="#333333" Foreground="White" BorderThickness="0" Padding="10,5" Cursor="Hand" Tag="{Binding url}" Click="BtnZiyaretEt_Click"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
                 </Grid>
-
-                <!-- KATMAN 2: AYARLAR EKRANI (Varsayılan Olarak Gizli) -->
-                <Grid x:Name="AyarlarPaneli" Visibility="Collapsed" Margin="30">
-                    <StackPanel>
-                        <TextBlock Text="⚙️ Ayarlar" Foreground="White" FontSize="28" FontWeight="Bold" Margin="0,0,0,30"/>
-
-                        <!-- Tema Seçici -->
-                        <Border Background="#1E1E1E" CornerRadius="8" Padding="20" Margin="0,0,0,20">
-                            <StackPanel>
-                                <TextBlock Text="Uygulama Teması" Foreground="White" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                                <TextBlock Text="ProjeHub'ın vurgu rengini (butonlar vb.) değiştirin." Foreground="#A0A0A0" FontSize="12" Margin="0,0,0,20"/>
-
-                                <StackPanel Orientation="Horizontal">
-                                    <Button Content="Mavi" Background="#007ACC" Foreground="White" BorderThickness="0" Width="100" Height="40" Margin="0,0,10,0" Cursor="Hand" Click="BtnTema_Click" Tag="#007ACC"/>
-                                    <Button Content="Yeşil" Background="#2EA043" Foreground="White" BorderThickness="0" Width="100" Height="40" Margin="0,0,10,0" Cursor="Hand" Click="BtnTema_Click" Tag="#2EA043"/>
-                                    <Button Content="Mor" Background="#8A2BE2" Foreground="White" BorderThickness="0" Width="100" Height="40" Margin="0,0,10,0" Cursor="Hand" Click="BtnTema_Click" Tag="#8A2BE2"/>
-                                    <Button Content="Kırmızı" Background="#D0342C" Foreground="White" BorderThickness="0" Width="100" Height="40" Margin="0,0,10,0" Cursor="Hand" Click="BtnTema_Click" Tag="#D0342C"/>
-                                </StackPanel>
-                            </StackPanel>
-                        </Border>
-                    </StackPanel>
-                </Grid>
-
             </Grid>
+
+            <!-- KATMAN 2: AYARLAR EKRANI -->
+            <Grid x:Name="AyarlarPaneli" Visibility="Collapsed" Margin="30">
+                <StackPanel>
+                    <TextBlock Text="⚙️ Ayarlar" Foreground="White" FontSize="28" FontWeight="Bold" Margin="0,0,0,30"/>
+                    <Border Background="#1E1E1E" CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                        <StackPanel>
+                            <TextBlock Text="Uygulama Teması" Foreground="White" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <TextBlock Text="ProjeHub'ın vurgu rengini (butonlar vb.) değiştirin." Foreground="#A0A0A0" FontSize="12" Margin="0,0,0,20"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Mavi" Background="#007ACC" Foreground="White" BorderThickness="0" Width="100" Height="40" Margin="0,0,10,0" Cursor="Hand" Click="BtnTema_Click" Tag="#007ACC"/>
+                                <Button Content="Yeşil" Background="#2EA043" Foreground="White" BorderThickness="0" Width="100" Height="40" Margin="0,0,10,0" Cursor="Hand" Click="BtnTema_Click" Tag="#2EA043"/>
+                                <Button Content="Mor" Background="#8A2BE2" Foreground="White" BorderThickness="0" Width="100" Height="40" Margin="0,0,10,0" Cursor="Hand" Click="BtnTema_Click" Tag="#8A2BE2"/>
+                                <Button Content="Kırmızı" Background="#D0342C" Foreground="White" BorderThickness="0" Width="100" Height="40" Margin="0,0,10,0" Cursor="Hand" Click="BtnTema_Click" Tag="#D0342C"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Grid>
+
         </Grid>
     </Grid>
 </Window>

@@ -20,7 +20,8 @@ namespace ProjeHub.UI
     {
         private static readonly HttpClient client = new HttpClient();
 
-        private List<HubItem> tumProjeler = new List<HubItem>(); // YENİ: Hafıza listemiz
+        // 💡 HAFIZA LİSTESİ BURADA
+        private List<HubItem> tumProjeler = new List<HubItem>();
 
         public MainWindow()
         {
@@ -40,6 +41,20 @@ namespace ProjeHub.UI
             VerileriGetir();
         }
 
+        // 📊 İSTATİSTİKLERİ GÜNCELLEYEN METOT
+        private void IstatistikleriGuncelle(List<HubItem> gosterilenListe)
+        {
+            if (gosterilenListe == null) return;
+
+            int toplam = gosterilenListe.Count;
+            int biten = gosterilenListe.Count(x => x.status == "Bitti");
+            int devamEden = gosterilenListe.Count(x => x.status == "Devam Ediyor");
+
+            TxtToplam.Text = toplam.ToString();
+            TxtBiten.Text = biten.ToString();
+            TxtDevam.Text = devamEden.ToString();
+        }
+
         private async void VerileriGetir()
         {
             try
@@ -50,11 +65,14 @@ namespace ProjeHub.UI
                 {
                     string jsonVeri = await cevap.Content.ReadAsStringAsync();
 
-                    // JSON'dan gelen veriyi ana hafıza listemize atıyoruz
+                    // Veriyi hafızaya al
                     tumProjeler = JsonSerializer.Deserialize<List<HubItem>>(jsonVeri);
 
-                    // Listeyi ekrana bağlıyoruz
+                    // Ekrana bas
                     ProjeListesi.ItemsSource = tumProjeler;
+
+                    // İstatistikleri güncelle
+                    IstatistikleriGuncelle(tumProjeler);
                 }
                 else
                 {
@@ -63,7 +81,29 @@ namespace ProjeHub.UI
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Python sunucusuna bağlanılamadı. Terminalde motor (uvicorn) açık mı?\nHata: {ex.Message}", "Bağlantı Hatası", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Python sunucusuna bağlanılamadı.\nHata: {ex.Message}", "Bağlantı Hatası", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // 🔍 CANLI ARAMA (LIVE SEARCH)
+        private void TxtArama_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string arananKelime = TxtArama.Text.ToLower();
+
+            if (string.IsNullOrWhiteSpace(arananKelime))
+            {
+                ProjeListesi.ItemsSource = tumProjeler;
+                IstatistikleriGuncelle(tumProjeler);
+            }
+            else
+            {
+                var filtrelenmis = tumProjeler.Where(p =>
+                    (p.title != null && p.title.ToLower().Contains(arananKelime)) ||
+                    (p.notes != null && p.notes.ToLower().Contains(arananKelime))
+                ).ToList();
+
+                ProjeListesi.ItemsSource = filtrelenmis;
+                IstatistikleriGuncelle(filtrelenmis);
             }
         }
 
@@ -90,7 +130,7 @@ namespace ProjeHub.UI
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Link açılamadı: {ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"Link açılamadı: {ex.Message}");
                 }
             }
         }
@@ -112,20 +152,15 @@ namespace ProjeHub.UI
                         {
                             VerileriGetir();
                         }
-                        else
-                        {
-                            MessageBox.Show($"Silme başarısız oldu: {cevap.StatusCode}", "Hata", MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"Sunucuya bağlanılamadı:\n{ex.Message}", "Bağlantı Hatası", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show($"Hata: {ex.Message}");
                     }
                 }
             }
         }
 
-        // 💡 DÜZENLE BUTONUNA DURUM (STATUS) PARAMETRESİ EKLENDİ
         private void BtnDuzenle_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
@@ -140,7 +175,7 @@ namespace ProjeHub.UI
                         secilenProje.category,
                         secilenProje.url,
                         secilenProje.notes,
-                        secilenProje.status // BUNU EKLİYORUZ!
+                        secilenProje.status
                     );
 
                     duzenlePenceresi.ShowDialog();
@@ -149,7 +184,7 @@ namespace ProjeHub.UI
             }
         }
 
-        private async void BtnFiltre_Click(object sender, RoutedEventArgs e)
+        private void BtnFiltre_Click(object sender, RoutedEventArgs e)
         {
             AnaEkranPaneli.Visibility = Visibility.Visible;
             AyarlarPaneli.Visibility = Visibility.Collapsed;
@@ -158,28 +193,17 @@ namespace ProjeHub.UI
             if (btn != null && btn.Tag != null)
             {
                 string secilenKategori = btn.Tag.ToString();
-                try
-                {
-                    HttpResponseMessage cevap = await client.GetAsync("http://127.0.0.1:8000/items/");
-                    if (cevap.IsSuccessStatusCode)
-                    {
-                        string jsonVeri = await cevap.Content.ReadAsStringAsync();
-                        List<HubItem> tumKayitlar = JsonSerializer.Deserialize<List<HubItem>>(jsonVeri);
 
-                        if (secilenKategori == "Hepsi")
-                        {
-                            ProjeListesi.ItemsSource = tumKayitlar;
-                        }
-                        else
-                        {
-                            var filtrelenmisListe = tumKayitlar.Where(x => x.category != null && x.category.Contains(secilenKategori)).ToList();
-                            ProjeListesi.ItemsSource = filtrelenmisListe;
-                        }
-                    }
-                }
-                catch (Exception ex)
+                if (secilenKategori == "Hepsi")
                 {
-                    MessageBox.Show($"Filtreleme sırasında hata oluştu: {ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Error);
+                    ProjeListesi.ItemsSource = tumProjeler;
+                    IstatistikleriGuncelle(tumProjeler);
+                }
+                else
+                {
+                    var filtrelenmisListe = tumProjeler.Where(x => x.category != null && x.category.Contains(secilenKategori)).ToList();
+                    ProjeListesi.ItemsSource = filtrelenmisListe;
+                    IstatistikleriGuncelle(filtrelenmisListe);
                 }
             }
         }
@@ -204,37 +228,8 @@ namespace ProjeHub.UI
                     System.IO.File.WriteAllText("tema.txt", secilenRenkHex);
                     MessageBox.Show("Tema rengi başarıyla güncellendi!", "Tema Değişti", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Renk değiştirilirken hata oluştu: {ex.Message}");
-                }
+                catch { }
             }
         }
-
-        // 🔍 CANLI ARAMA (LIVE SEARCH) METODU
-        private void TxtArama_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            // Kullanıcının yazdığı metni alıp küçük harfe çeviriyoruz (Büyük/küçük harf duyarlılığını kaldırmak için)
-            string arananKelime = TxtArama.Text.ToLower();
-
-            // Eğer arama kutusu boşsa, hafızadaki tüm listeyi geri yükle
-            if (string.IsNullOrWhiteSpace(arananKelime))
-            {
-                ProjeListesi.ItemsSource = tumProjeler;
-            }
-            else
-            {
-                // LINQ büyüsü: Başlığında VEYA Notlarında aranan kelime geçenleri süzgeçten geçir!
-                var filtrelenmis = tumProjeler.Where(p =>
-                    (p.title != null && p.title.ToLower().Contains(arananKelime)) ||
-                    (p.notes != null && p.notes.ToLower().Contains(arananKelime))
-                ).ToList();
-
-                // Çıkan sonucu ekrana bas
-                ProjeListesi.ItemsSource = filtrelenmis;
-            }
-        }
-
-
     }
 }
