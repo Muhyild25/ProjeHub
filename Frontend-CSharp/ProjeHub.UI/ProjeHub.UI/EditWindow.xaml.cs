@@ -13,21 +13,35 @@ namespace ProjeHub.UI
         private string projeUrl;
         private static readonly HttpClient client = new HttpClient();
 
-        // Pencere açılırken ID, Başlık, Kategori ve URL'yi dışarıdan alıyoruz
-        public EditWindow(string id, string baslik, string kategori, string url)
+        // DİKKAT: Parametrelere 'durum' eklendi!
+        public EditWindow(string id, string baslik, string kategori, string url, string notlar, string durum)
         {
             InitializeComponent();
             projeId = id;
             projeUrl = url;
 
-            // Kutulara mevcut bilgileri dolduruyoruz
             TxtBaslik.Text = baslik;
+
+            if (!string.IsNullOrEmpty(notlar))
+            {
+                TxtNotlar.Text = notlar;
+            }
 
             foreach (ComboBoxItem item in CmbKategori.Items)
             {
                 if (item.Content.ToString() == kategori)
                 {
                     CmbKategori.SelectedItem = item;
+                    break;
+                }
+            }
+
+            // Mevcut durumu kutuda seçili hale getir
+            foreach (ComboBoxItem item in CmbDurum.Items)
+            {
+                if (item.Content.ToString() == durum)
+                {
+                    CmbDurum.SelectedItem = item;
                     break;
                 }
             }
@@ -42,16 +56,17 @@ namespace ProjeHub.UI
         {
             string yeniBaslik = TxtBaslik.Text;
             string yeniKategori = ((ComboBoxItem)CmbKategori.SelectedItem).Content.ToString();
+            string yeniDurum = ((ComboBoxItem)CmbDurum.SelectedItem).Content.ToString(); // YENİ SEÇİLEN DURUM
+            string yeniNotlar = TxtNotlar.Text;
 
-            // Güncellenmiş veri paketi
             var guncelVeri = new
             {
                 title = yeniBaslik,
                 url = projeUrl,
                 category = yeniKategori,
                 priority = "Orta",
-                status = "Yapılacak",
-                notes = ""
+                status = yeniDurum, // ARTIK DURUM SABİT DEĞİL, KUTUDAN GİDİYOR!
+                notes = yeniNotlar
             };
 
             string json = JsonSerializer.Serialize(guncelVeri);
@@ -62,13 +77,12 @@ namespace ProjeHub.UI
                 BtnKaydet.IsEnabled = false;
                 BtnKaydet.Content = "Kaydediliyor...";
 
-                // Python sunucusuna (Veritabanına) PUT isteği (Güncelleme) atıyoruz
                 HttpResponseMessage cevap = await client.PutAsync($"http://127.0.0.1:8000/items/{projeId}", icerik);
 
                 if (cevap.IsSuccessStatusCode)
                 {
                     MessageBox.Show("Proje başarıyla güncellendi!", "Başarılı", MessageBoxButton.OK, MessageBoxImage.Information);
-                    this.Close(); // Pencereyi kapat
+                    this.Close();
                 }
                 else
                 {

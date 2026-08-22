@@ -11,7 +11,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-
 using System.Net.Http;
 using System.Text.Json;
 
@@ -34,14 +33,16 @@ namespace ProjeHub.UI
             this.Close();
         }
 
-        // KAYDET BUTONU
-        private async void BtnKaydet_Click(object sender, RoutedEventArgs e)
+        // KAYDET (EKLE) BUTONU - XAML ile uyumlu olması için adı BtnEkle_Click oldu
+        private async void BtnEkle_Click(object sender, RoutedEventArgs e)
         {
-            string url = txtUrl.Text;
+            string url = TxtUrl.Text; // Tasarımdaki TxtUrl'den alıyoruz
+            string baslik = TxtBaslik.Text; // Tasarımdaki başlık kutusu
+            string notlar = TxtNotlar.Text; // 📝 YENİ: NOTLAR KUTUSUNU ALIYORUZ!
 
-            if (string.IsNullOrWhiteSpace(url))
+            if (string.IsNullOrWhiteSpace(url) && string.IsNullOrWhiteSpace(baslik))
             {
-                MessageBox.Show("Lütfen bir link girin!", "Uyarı", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Lütfen bir başlık veya link girin!", "Uyarı", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -51,65 +52,66 @@ namespace ProjeHub.UI
 
             try
             {
-                // Artık "using (HttpClient...)" satırına ihtiyacımız YOK! 
-                // Direkt en yukarıdaki kalıcı 'client' nesnesini kullanıyoruz.
-
                 // --- 1. AŞAMA: PYTHON'DAN LİNKİ KAZIMASINI İSTİYORUZ ---
-                var extractData = new { url = url };
-                string extractJson = JsonSerializer.Serialize(extractData);
-                StringContent extractIcerik = new StringContent(extractJson, Encoding.UTF8, "application/json");
-
-                // Kazıma kapısını çalıyoruz
-                HttpResponseMessage kazimaCevabi = await client.PostAsync("http://127.0.0.1:8000/extract-link/", extractIcerik);
-
-                if (kazimaCevabi.IsSuccessStatusCode)
+                if (!string.IsNullOrWhiteSpace(url))
                 {
-                    string gelenJson = await kazimaCevabi.Content.ReadAsStringAsync();
-                    string baslik = "Başlıksız Proje";
+                    var extractData = new { url = url };
+                    string extractJson = JsonSerializer.Serialize(extractData);
+                    StringContent extractIcerik = new StringContent(extractJson, Encoding.UTF8, "application/json");
 
-                    using (JsonDocument doc = JsonDocument.Parse(gelenJson))
+                    // Kazıma kapısını çalıyoruz
+                    HttpResponseMessage kazimaCevabi = await client.PostAsync("http://127.0.0.1:8000/extract-link/", extractIcerik);
+
+                    if (kazimaCevabi.IsSuccessStatusCode)
                     {
-                        JsonElement root = doc.RootElement;
-                        if (root.TryGetProperty("title", out JsonElement titleElement) && titleElement.ValueKind == JsonValueKind.String)
+                        string gelenJson = await kazimaCevabi.Content.ReadAsStringAsync();
+                        using (JsonDocument doc = JsonDocument.Parse(gelenJson))
                         {
-                            string cikanBaslik = titleElement.GetString();
-                            if (!string.IsNullOrEmpty(cikanBaslik)) baslik = cikanBaslik;
+                            JsonElement root = doc.RootElement;
+                            if (root.TryGetProperty("title", out JsonElement titleElement) && titleElement.ValueKind == JsonValueKind.String)
+                            {
+                                string cikanBaslik = titleElement.GetString();
+
+                                // Eğer kullanıcı başlık yazmadıysa, kazınan başlığı kullan!
+                                if (!string.IsNullOrEmpty(cikanBaslik) && string.IsNullOrWhiteSpace(baslik))
+                                {
+                                    baslik = cikanBaslik;
+                                }
+                            }
                         }
                     }
+                }
 
+                // Hâlâ boşsa varsayılan başlık ata
+                if (string.IsNullOrWhiteSpace(baslik)) baslik = "Başlıksız Proje";
 
-                    string secilenKategori = ((ComboBoxItem)CmbKategori.SelectedItem).Content.ToString();
+                string secilenKategori = ((ComboBoxItem)CmbKategori.SelectedItem).Content.ToString();
 
-                    // --- 2. AŞAMA: KAZINAN VERİYİ VERİTABANINA KAYDEDİYORUZ ---
-                    var kayitVerisi = new
-                    {
-                        title = baslik,
-                        url = url,
-                        category = secilenKategori, // ARTIK DİNAMİK OLDU!
-                        priority = "Orta",
-                        status = "Yapılacak",
-                        notes = ""
-                    };
+                // --- 2. AŞAMA: KAZINAN VERİYİ VERİTABANINA KAYDEDİYORUZ ---
+                var kayitVerisi = new
+                {
+                    title = baslik,
+                    url = url,
+                    category = secilenKategori,
+                    priority = "Orta",
+                    status = "Yapılacak",
+                    notes = notlar // 📝 NOTLAR BURADAN VERİTABANINA GİDİYOR!
+                };
 
-                    string kayitJson = JsonSerializer.Serialize(kayitVerisi);
-                    StringContent kayitIcerik = new StringContent(kayitJson, Encoding.UTF8, "application/json");
+                string kayitJson = JsonSerializer.Serialize(kayitVerisi);
+                StringContent kayitIcerik = new StringContent(kayitJson, Encoding.UTF8, "application/json");
 
-                    // Veritabanına yazması için /items/ kapısını çalıyoruz
-                    HttpResponseMessage kayitCevabi = await client.PostAsync("http://127.0.0.1:8000/items/", kayitIcerik);
+                // Veritabanına yazması için /items/ kapısını çalıyoruz
+                HttpResponseMessage kayitCevabi = await client.PostAsync("http://127.0.0.1:8000/items/", kayitIcerik);
 
-                    if (kayitCevabi.IsSuccessStatusCode)
-                    {
-                        MessageBox.Show($"Başlık: {baslik}\n\nLink başarıyla veritabanına işlendi!", "Harika Haber", MessageBoxButton.OK, MessageBoxImage.Information);
-                        this.Close();
-                    }
-                    else
-                    {
-                        MessageBox.Show($"Kayıt Başarısız: {kayitCevabi.StatusCode}", "Veritabanı Hatası", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
+                if (kayitCevabi.IsSuccessStatusCode)
+                {
+                    MessageBox.Show($"Başlık: {baslik}\n\nKayıt başarıyla işlendi!", "Harika Haber", MessageBoxButton.OK, MessageBoxImage.Information);
+                    this.Close();
                 }
                 else
                 {
-                    MessageBox.Show($"Link kazınamadı: {kazimaCevabi.StatusCode}", "Scraper Hatası", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"Kayıt Başarısız: {kayitCevabi.StatusCode}", "Veritabanı Hatası", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             catch (Exception ex)
@@ -119,7 +121,7 @@ namespace ProjeHub.UI
             finally
             {
                 btn.IsEnabled = true;
-                btn.Content = "Kaydet";
+                btn.Content = "Ekle";
             }
         }
     }
